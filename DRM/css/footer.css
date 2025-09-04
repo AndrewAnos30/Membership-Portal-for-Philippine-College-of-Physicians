@@ -1,0 +1,15 @@
+.site-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: transparent; /* fully see-through */
+    text-align: center;
+    padding: 2px 0;
+    color: #4F1713;
+    font-weight: bold;
+    border-top: 1px solid #d3d3d3; /* light grey */
+    font-size: 10px;
+    font-family: 'Roboto';
+}
+
