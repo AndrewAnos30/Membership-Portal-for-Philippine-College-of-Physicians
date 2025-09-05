@@ -1,0 +1,124 @@
+aside.sidebar {
+    position: fixed;
+    top: 85px;
+    width: 220px;
+    height: calc(100vh - 60px); 
+    background-color: #ffffff;
+    border-right: 1px solid #e6eff5;
+    box-sizing: border-box;
+    padding: 0;
+}
+
+aside.sidebar ul {
+    list-style: none;
+    padding: 20px 0 0 0;
+    margin: 0;
+}
+
+aside.sidebar ul li {
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding: 15px 20px 15px 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    color: #B1B1B1; /* Default text color (light gray) */
+}
+
+aside.sidebar ul li i {
+    margin-right: 12px;
+    min-width: 16px;
+    text-align: center;
+    color: #B1B1B1; /* Default icon color (light gray) */
+}
+
+aside.sidebar ul li:hover {
+    background-color: #f2f8fb;
+}
+
+aside.sidebar ul li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 8px;
+    bottom: 8px;
+    width: 6px;
+    background-color: transparent;
+    border-radius: 0 4px 4px 0; 
+    transition: background-color 0.3s ease;
+}
+
+aside.sidebar ul li.active {
+    font-weight: bold;
+    color: #4F1713; /* Active text color */
+}
+
+aside.sidebar ul li.active i {
+    color: #4F1713; /* Active icon color */
+}
+
+aside.sidebar ul li.active::before {
+    background-color: #4F1713; /* Active bar color */
+}
+
+aside.sidebar ul li:not(.active) {
+    color: #4F89B3; /* Inactive text color (blue) */
+}
+
+aside.sidebar ul li:not(.active) i {
+    color: #4F89B3; /* Inactive icon color (blue) */
+}
+
+@media (max-width: 768px) {
+    aside.sidebar {
+        position: fixed;
+        top: 60px; /* Below the header */
+        left: 0;
+        width: 100%;
+        height: auto;
+        border-right: none;
+        border-bottom: 1px solid #e6eff5;
+        background-color: #ffffff;
+        z-index: 999;
+    }
+
+    aside.sidebar ul {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+        align-items: center;
+        padding: 10px 0;
+    }
+
+    aside.sidebar ul li {
+        flex-direction: row; /* Keep icon and (now hidden) text side by side */
+        padding: 10px 12px;
+        font-size: 14px;
+    }
+
+    aside.sidebar ul li span {
+        display: none; /* Hide text only */
+    }
+
+    aside.sidebar ul li i {
+        margin: 0; /* Remove margin since text is hidden */
+        font-size: 16px;
+    }
+
+    aside.sidebar ul li::before {
+        display: none;
+    }
+
+    aside.sidebar ul li.active {
+        border-bottom: 3px solid #4F1713;
+        font-weight: bold;
+    }
+
+    aside.sidebar ul li:not(.active) {
+        color: #4F89B3; /* Inactive text color (blue) for mobile */
+    }
+
+    aside.sidebar ul li:not(.active) i {
+        color: #4F89B3; /* Inactive icon color (blue) for mobile */
+    }
+}
