@@ -3,24 +3,22 @@
 include('../connection/conn.php');
 
 // Query to fetch chapter names from the 'chapters' table
-$query = "SELECT chapter FROM chapters";
+$query = "SELECT chapter FROM chapters ORDER BY chapter ASC";
 $result = mysqli_query($conn, $query);
 
 // Start the select dropdown
 echo '<div class="form-group">';
-echo '<label for="event_host_category">Event Host Category</label>';
-echo '<select id="event_host_category" name="event_host_category">';
-echo '<option value="">Select Host Category</option>';  // Default option
+echo '<label for="hosted_by">Hosted By</label>';
+echo '<select id="hosted_by" name="hosted_by" required>';
+echo '<option value="">-- Select Chapter --</option>';  // Default option
 
 // Check if the query returned any rows
-if (mysqli_num_rows($result) > 0) {
-    // Loop through the results and create an option for each chapter
+if ($result && mysqli_num_rows($result) > 0) {
     while ($row = mysqli_fetch_assoc($result)) {
-        $chapter = $row['chapter'];
+        $chapter = htmlspecialchars($row['chapter']);
         echo "<option value=\"$chapter\">$chapter</option>";
     }
 } else {
-    // If no chapters are found in the database
     echo '<option value="">No Chapters Available</option>';
 }
 

@@ -1,6 +1,6 @@
 <?php
 include '../connection/conn.php'; // your DB connection
-include '../admin/php/getMembers.php';
+include '../admin/php/membership/getMembers.php';
 session_start();
 $message = "";
 $type = "";
@@ -46,11 +46,10 @@ if (isset($_SESSION['success'])) {
             <label for="chapter">Chapter:</label>
             <select id="chapter" name="chapter">
               <option value="">--Select Chapter--</option>
-              <option value="Manila">Manila</option>
-              <option value="Quezon">Quezon City</option>
-              <option value="Pasay">Pasay</option>
+              <?php include 'php/membership/getChapters.php'; ?>
             </select>
           </div>
+
           <button type="submit" class="submit-search">Submit</button>
           <button type="button" class="reset-form">Reset</button>
         </form>
@@ -105,7 +104,7 @@ if (isset($_SESSION['success'])) {
 
       <!-- Tab Content -->
       <div class="tab-content">
-        <form id="member-form" method="POST" action="php/master_creation.php" enctype="multipart/form-data">
+        <form id="member-form" method="POST" action="php/membership/master_creation.php" enctype="multipart/form-data">
         <!-- Tab 1 -->
         <div class="tab-pane active" id="account-panel">
           <!-- Account Creation -->
@@ -142,9 +141,11 @@ if (isset($_SESSION['success'])) {
         <!-- Tab 2 -->
         <div class="tab-pane" id="personal-info-panel">
           <div class="personal-info-wrapper">
-            <!-- LEFT: IMAGE -->
             <div class="file-upload">
+              <!-- Preview -->
               <img src="default.png" alt="Profile Preview" class="file-preview" id="preview">
+              
+              <!-- Upload Button -->
               <label for="profile_pic" class="file-label">Upload Photo</label>
               <input type="file" name="profile_pic" id="profile_pic" accept="image/*">
             </div>
@@ -413,13 +414,13 @@ if (isset($_SESSION['success'])) {
                 <label for="member_status">Membership Status</label>
                 <select id="member_status" name="member_status" required>
                   <option value="">-- Select Status --</option>
-                  <option>Active</option>
-                  <option>Deceased</option>
-                  <option>Inactive</option>
-                  <option>Terminated</option>
-                  <option>Conditional</option>
-                  <option>Suspended</option>
-                  <option>Invalid Account</option>
+                  <option value="Active">Active</option>
+                  <option value="Deceased">Deceased</option>
+                  <option value="Inactive">Inactive</option>
+                  <option value="Terminated">Terminated</option>
+                  <option value="Conditional">Conditional</option>
+                  <option value="Suspended">Suspended</option>
+                  <option value="Invalid Account">Invalid Account</option>
                 </select>
               </div>
             </div>
@@ -490,9 +491,8 @@ if (isset($_SESSION['success'])) {
                     <img src="../img/info.png" alt="info">
                   </span>
                 </label>
-                <input type="tel" id="mobile" name="mobile" value="+63" pattern="^\+63[0-9]{10}$" maxlength="13"requiredoninput="formatMobile(this)">
+                <input type="tel" id="mobile" name="mobile" value="+63" pattern="^\+63[0-9]{10}$" maxlength="13" required oninput="formatMobile(this)">
               </div>
-
               <!-- Phone -->
               <div class="form-group">
                 <label for="phone">
@@ -854,15 +854,15 @@ function formatMobile(input) {
   }
 }
 </script>
-<!-- for filter of search Member -->
 <script>
+document.addEventListener("DOMContentLoaded", () => {
   const tableBody = document.getElementById('membersTableBody');
   const form = document.getElementById('memberSearchForm');
   const resetBtn = document.querySelector('.reset-form');
   const pagination = document.getElementById('pagination');
 
-  const members = <?php echo json_encode($members); ?>;
-  const rowsPerPage = 2; // change if needed
+  const members = <?php echo json_encode($members ?? []); ?>;
+  const rowsPerPage = 2;
   let currentPage = 1;
   let currentData = members;
 
@@ -876,13 +876,14 @@ function formatMobile(input) {
       tableBody.innerHTML = '<tr><td colspan="5">No members found.</td></tr>';
     } else {
       paginatedData.forEach(m => {
-        const row = `<tr>
-          <td>${m.membership_no}</td>
-          <td>${m.lastname}, ${m.firstname} ${m.middlename || ''} ${m.extname || ''}</td>
-          <td>${m.member_chapter}</td>
-          <td>${m.member_category}</td>
-          <td>${m.member_status}</td>
-        </tr>`;
+        const row = `
+          <tr>
+            <td>${m.membership_no}</td>
+            <td>${m.lastname}, ${m.firstname} ${m.middlename || ''} ${m.extname || ''}</td>
+            <td>${m.member_chapter}</td>
+            <td>${m.member_category}</td>
+            <td>${m.member_status}</td>
+          </tr>`;
         tableBody.innerHTML += row;
       });
     }
@@ -894,11 +895,11 @@ function formatMobile(input) {
     const totalPages = Math.ceil(data.length / rowsPerPage);
     if (totalPages <= 1) return;
 
-    // Prev link
+    // Prev
     const prev = document.createElement('a');
     prev.href = "#";
-    prev.classList.add('prev');
     prev.textContent = '« Prev';
+    prev.classList.add('prev');
     prev.addEventListener('click', e => {
       e.preventDefault();
       if (currentPage > 1) {
@@ -908,25 +909,25 @@ function formatMobile(input) {
     });
     pagination.appendChild(prev);
 
-    // Page numbers
+    // Numbers
     for (let i = 1; i <= totalPages; i++) {
-      const pageLink = document.createElement('a');
-      pageLink.href = "#";
-      pageLink.textContent = i;
-      if (i === page) pageLink.classList.add('active');
-      pageLink.addEventListener('click', e => {
+      const link = document.createElement('a');
+      link.href = "#";
+      link.textContent = i;
+      if (i === page) link.classList.add('active');
+      link.addEventListener('click', e => {
         e.preventDefault();
         currentPage = i;
         renderTable(currentData, currentPage);
       });
-      pagination.appendChild(pageLink);
+      pagination.appendChild(link);
     }
 
-    // Next link
+    // Next
     const next = document.createElement('a');
     next.href = "#";
-    next.classList.add('next');
     next.textContent = 'Next »';
+    next.classList.add('next');
     next.addEventListener('click', e => {
       e.preventDefault();
       if (currentPage < totalPages) {
@@ -940,19 +941,20 @@ function formatMobile(input) {
   // Initial render
   renderTable(members);
 
-  form.addEventListener('submit', function(e) {
+  form.addEventListener('submit', e => {
     e.preventDefault();
     const searchName = document.getElementById('searchName').value.toLowerCase();
-    const chapter = document.getElementById('chapter').value;
+    const chapter = document.getElementById('chapter').value.toLowerCase();
 
     currentData = members.filter(m => {
       const fullName = (m.lastname + ' ' + m.firstname + ' ' + (m.middlename || '') + ' ' + (m.extname || '')).toLowerCase();
       const membershipNo = m.membership_no.toLowerCase();
+      const chapterMatch = chapter === '' || m.member_chapter.toLowerCase() === chapter;
 
-      const nameMatch = searchName === '' || fullName.includes(searchName) || membershipNo.includes(searchName);
-      const chapterMatch = chapter === '' || m.member_chapter === chapter;
-
-      return nameMatch && chapterMatch;
+      return (
+        (searchName === '' || fullName.includes(searchName) || membershipNo.includes(searchName)) &&
+        chapterMatch
+      );
     });
 
     currentPage = 1;
@@ -966,6 +968,23 @@ function formatMobile(input) {
     currentPage = 1;
     renderTable(currentData, currentPage);
   });
+});
 </script>
+<script>
+document.getElementById('profile_pic').addEventListener('change', function(event) {
+    const file = event.target.files[0];
+    if (file && file.type.startsWith("image/")) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            document.getElementById('preview').src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+    } else {
+        alert("Please select a valid image file.");
+        event.target.value = ""; // reset invalid input
+    }
+});
+</script>
+
 <?php include '../footer.php'; ?>
 </html>

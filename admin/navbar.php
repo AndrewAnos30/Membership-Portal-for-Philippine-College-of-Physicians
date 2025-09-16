@@ -10,7 +10,7 @@
         <li data-link="events"><i class="fas fa-calendar-alt"></i><span>Event</span></li>
         <li data-link="payments"><i class="fas fa-credit-card"></i><span>Payment</span></li>
         <li data-link="reports"><i class="fas fa-chart-bar"></i><span>Report</span></li>
-        <li data-link="user"><i class="fas fa-users-cog"></i><span>User</span></li>
+        <li data-link="users"><i class="fas fa-users-cog"></i><span>User</span></li>
     </ul>
 </aside>
 

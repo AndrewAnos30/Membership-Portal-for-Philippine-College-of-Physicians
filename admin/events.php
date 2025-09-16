@@ -65,66 +65,52 @@ include 'header.php';
     <div id="add-event" class="tab-pane">
       <form class="event-form" action="php/events/create_event.php" method="POST">
         
-        <!-- Event ID -->
         <div class="form-group">
-          <label for="event_id">Event ID</label>
-          <input type="text" id="event_id" name="event_id" placeholder="EVT-2025-001" required>
+            <label for="event_title">Event Title</label>
+            <input type="text" id="event_title" name="event_title" placeholder="Enter Event Title" required>
         </div>
-
-        <!-- Event Title -->
-        <div class="form-group">
-          <label for="event_title">Event Title</label>
-          <input type="text" id="event_title" name="event_title" placeholder="Enter Event Title" required>
-        </div>
-
-        <!-- Venue & Date -->
         <div class="form-row">
+          <div class="form-group">
+            <label for="event_id">Event ID</label>
+            <input type="text" id="event_id" name="event_id" readonly>
+          </div>
           <div class="form-group">
             <label for="venue">Venue</label>
             <input type="text" id="venue" name="venue" placeholder="Enter Venue">
           </div>
+        </div>
+
+        <!-- Event Date, Fiscal Year -->
+        <div class="form-row">
           <div class="form-group">
             <label for="event_date">Event Date</label>
             <input type="date" id="event_date" name="event_date" required>
           </div>
+          <div class="form-group">
+            <label for="fiscal_year">Fiscal Year</label>
+            <input type="text" id="fiscal_year" name="fiscal_year" placeholder="2025-2026">
+          </div>
         </div>
 
-        <!-- Event Type & Fiscal Year -->
+        <!-- Event Type, CPD Units -->
         <div class="form-row">
           <div class="form-group">
             <label for="event_type">Event Type</label>
             <select id="event_type" name="event_type">
               <option value="">Select Event Type</option>
-              <option>Conference</option>
-              <option>Seminar</option>
-              <option>Workshop</option>
-              <option>Webinar</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="fiscal_year">Fiscal Year</label>
-            <input type="text" id="fiscal_year" name="fiscal_year" placeholder="2025">
-          </div>
-        </div>
-
-        <!-- Event Host Type & CPD Units -->
-        <div class="form-row">
-          <div class="form-group">
-            <label for="event_host_type">Event Host Type</label>
-            <select id="event_host_type" name="event_host_type">
-              <option value="">Select Host Type</option>
-              <option value="doh_hospital">DOH HOSPITAL</option>
-              <option value="international_society">INTERNATIONAL SOCIETY</option>
-              <option value="medical_allied_society">MEDICAL ALLIED SOCIETY/GROUP</option>
-              <option value="non_pcp_medical_society">NON-PCP MEDICAL SOCIETY</option>
-              <option value="pcp">PCP</option>
-              <option value="pcp_affiliate_society">PCP AFFILIATE SOCIETY</option>
-              <option value="pcp_component_society">PCP COMPONENT SOCIETY</option>
-              <option value="pcp_local_chapter">PCP LOCAL CHAPTER</option>
-              <option value="pcp_acc_training_hospital">PCP-ACCREDITED TRAINING HOSPITAL/INSTITUTION</option>
-              <option value="pharmaceutical_industry">PHARMACEUTICAL INDUSTRY</option>
-              <option value="research_institute">RESEARCH INSTITUTE</option>
-              <option value="school_university">SCHOOL/UNIVERSITY</option>
+              <option>ANNUAL CONVENTION</option>
+              <option>COMMUNITY ADVOCACY EVENT</option>
+              <option>MEDICAL MISSION</option>
+              <option>MIDYEAR CONVENTION</option>
+              <option>OUTREACH PROGRAM</option>
+              <option>PCP BUSINESS MEETING</option>
+              <option>POSTGRADUATE COURSE</option>
+              <option>ROUND TABLE DISCUSSION</option>
+              <option>SCIENTIFIC FORUM</option>
+              <option>SEMINAR</option>
+              <option>SYMPOSIUM</option>
+              <option>TRAINING COURSE</option>
+              <option>WORKSHOP</option>              
             </select>
           </div>
           <div class="form-group">
@@ -133,27 +119,13 @@ include 'header.php';
           </div>
         </div>
 
-        <!-- Event Host & Host Category -->
+        <!-- Event Host, Hosted By -->
         <div class="form-row">
           <div class="form-group">
             <label for="event_host">Event Host</label>
             <input type="text" id="event_host" name="event_host" placeholder="Enter Event Host">
           </div>
-          <div class="form-group">
-            <label for="event_host_category">Event Host Category</label>
-            <select id="event_host_category" name="event_host_category">
-              <option value="">Select Host Category</option>
-              <option>National</option>
-              <option>Regional</option>
-              <option>Local</option>
-            </select>
-          </div>
-        </div>
-
-        <!-- Hosted By -->
-        <div class="form-group">
-          <label for="hosted_by">Hosted By</label>
-          <input type="text" id="hosted_by" name="hosted_by" placeholder="Enter Hosted By">
+          <?php include("php/events/select_chapters.php"); ?>
         </div>
 
         <!-- Description -->
@@ -177,102 +149,129 @@ include 'header.php';
   <div class="modal-content">
     <span class="close">&times;</span>
     <h3>Edit Event</h3>
-    <form id="editEventForm" method="POST" action="php/events/edit_event.php">
-        <!-- Hidden field for event_id -->
-        <input type="hidden" id="event_id" name="event_id">
+      <form id="editEventForm" method="POST" action="php/events/edit_event.php">
+          <!-- Event ID -->
+          <div class="form-group">
+              <label for="event_id">Event ID</label>
+              <input type="text" id="event_id" name="event_id" readonly>
+          </div>
 
-        <div class="form-group">
-          <label for="event_title">Event Title</label>
-          <input type="text" id="event_title" name="event_title" required>
-        </div>
+          <!-- Event Title (full row) -->
+          <div class="edit-form-row full-row">
+              <div class="form-group">
+                  <label for="event_title">Event Title</label>
+                  <input type="text" id="event_title" name="event_title" required>
+              </div>
+          </div>
 
-        <div class="form-group">
-          <label for="venue">Venue</label>
-          <input type="text" id="venue" name="venue">
-        </div>
+          <!-- Event Title + Venue -->
+          <div class="edit-form-row">
+              <div class="form-group">
+                  <label for="event_title">Event Title</label>
+                  <input type="text" id="event_title" name="event_title" required>
+              </div>
+              <div class="form-group">
+                  <label for="venue">Venue</label>
+                  <input type="text" id="venue" name="venue">
+              </div>
+          </div>
 
-        <div class="form-group">
-          <label for="description">Description</label>
-          <textarea id="description" name="description" rows="3"></textarea>
-        </div>
+          <!-- Event Date + Fiscal Year -->
+          <div class="edit-form-row">
+              <div class="form-group">
+                  <label for="event_date">Event Date</label>
+                  <input type="date" id="event_date" name="event_date" required>
+              </div>
+              <div class="form-group">
+                  <label for="fiscal_year">Fiscal Year</label>
+                  <input type="text" id="fiscal_year" name="fiscal_year">
+              </div>
+          </div>
 
-        <div class="form-group">
-          <label for="event_date">Event Date</label>
-          <input type="date" id="event_date" name="event_date" required>
-        </div>
+          <!-- Event Type + CPD Units -->
+          <div class="edit-form-row">
+              <div class="form-group">
+                  <label for="event_type">Event Type</label>
+                  <select id="event_type" name="event_type" required>
+                      <option value="">Select Event Type</option>
+                      <option>ANNUAL CONVENTION</option>
+                      <option>COMMUNITY ADVOCACY EVENT</option>
+                      <option>MEDICAL MISSION</option>
+                      <option>MIDYEAR CONVENTION</option>
+                      <option>OUTREACH PROGRAM</option>
+                      <option>PCP BUSINESS MEETING</option>
+                      <option>POSTGRADUATE COURSE</option>
+                      <option>ROUND TABLE DISCUSSION</option>
+                      <option>SCIENTIFIC FORUM</option>
+                      <option>SEMINAR</option>
+                      <option>SYMPOSIUM</option>
+                      <option>TRAINING COURSE</option>
+                      <option>WORKSHOP</option>
+                  </select>
+              </div>
+              <div class="form-group">
+                  <label for="cpd_units">CPD Units</label>
+                  <input type="number" id="cpd_units" name="cpd_units">
+              </div>
+          </div>
 
-        <div class="form-group">
-          <label for="event_type">Event Type</label>
-          <select id="event_type" name="event_type">
-            <option value="">Select Event Type</option>
-            <option>Conference</option>
-            <option>Seminar</option>
-            <option>Workshop</option>
-            <option>Webinar</option>
-          </select>
-        </div>
+          <!-- Event Host + Hosted By -->
+          <div class="edit-form-row">
+              <div class="form-group">
+                  <label for="event_host">Event Host</label>
+                  <input type="text" id="event_host" name="event_host">
+              </div>
+          <?php include("php/events/select_chapters.php"); ?>
+          </div>
 
-        <div class="form-group">
-          <label for="fiscal_year">Fiscal Year</label>
-          <input type="text" id="fiscal_year" name="fiscal_year">
-        </div>
+          <!-- Created At (readonly, full row) -->
+          <div class="edit-form-row full-row">
+              <div class="form-group">
+                  <label for="created_at">Created At</label>
+                  <input type="text" id="created_at" name="created_at" readonly>
+              </div>
+          </div>
 
-        <div class="form-group">
-          <label for="event_host_type">Event Host Type</label>
-          <select id="event_host_type" name="event_host_type">
-            <option value="">Select Host Type</option>
-            <option value="doh_hospital">DOH HOSPITAL</option>
-            <option value="international_society">INTERNATIONAL SOCIETY</option>
-            <option value="medical_allied_society">MEDICAL ALLIED SOCIETY/GROUP</option>
-            <option value="non_pcp_medical_society">NON-PCP MEDICAL SOCIETY</option>
-            <option value="pcp">PCP</option>
-            <option value="pcp_affiliate_society">PCP AFFILIATE SOCIETY</option>
-            <option value="pcp_component_society">PCP COMPONENT SOCIETY</option>
-            <option value="pcp_local_chapter">PCP LOCAL CHAPTER</option>
-            <option value="pcp_acc_training_hospital">PCP-ACCREDITED TRAINING HOSPITAL/INSTITUTION</option>
-            <option value="pharmaceutical_industry">PHARMACEUTICAL INDUSTRY</option>
-            <option value="research_institute">RESEARCH INSTITUTE</option>
-            <option value="school_university">SCHOOL/UNIVERSITY</option>
-          </select>
-        </div>
+                    <!-- Description (full row) -->
+          <div class="edit-form-row full-row">
+              <div class="form-group">
+                  <label for="description">Description</label>
+                  <textarea id="description" name="description" rows="3"></textarea>
+              </div>
+          </div>
 
-        <div class="form-group">
-          <label for="cpd_units">CPD Units</label>
-          <input type="number" id="cpd_units" name="cpd_units">
-        </div>
-
-        <div class="form-group">
-          <label for="event_host">Event Host</label>
-          <input type="text" id="event_host" name="event_host">
-        </div>
-
-      <div class="form-group">
-          <label for="event_host_category">Event Host Category</label>
-          <select id="event_host_category" name="event_host_category">
-              <option value="">No Chapters Available</option>
-          </select>
-      </div>
-
-
-        <div class="form-group">
-          <label for="hosted_by">Hosted By</label>
-          <input type="text" id="hosted_by" name="hosted_by">
-        </div>
-
-        <!-- Created At (Not Editable, Automatically Set) -->
-        <div class="form-group">
-          <label for="created_at">Created At</label>
-          <input type="text" id="created_at" name="created_at" readonly>
-        </div>
-
-        <div class="form-actions">
-          <button type="submit" class="btn-submit">Save</button>
-          <button type="button" class="btn-reset close-btn">Cancel</button>
-        </div>
-    </form>
+          <!-- Actions -->
+          <div class="form-actions">
+              <button type="submit" class="btn-submit">Save</button>
+              <button type="button" class="btn-reset close-btn">Cancel</button>
+          </div>
+      </form>
   </div>
 </div>
 
+<script>
+  document.getElementById("event_type").addEventListener("change", function() {
+    let eventType = this.value;
+
+    if(eventType) {
+        fetch("php/events/id_generator.php", {
+            method: "POST",
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            body: "event_type=" + encodeURIComponent(eventType)
+        })
+        .then(response => response.json())
+        .then(data => {
+            if(data.event_id) {
+                document.getElementById("event_id").value = data.event_id;
+            } else {
+                alert("Error: " + data.error);
+            }
+        });
+    } else {
+        document.getElementById("event_id").value = "";
+    }
+});
+</script>
 <script>
 $(document).ready(function() {
     // Initially hide the modals

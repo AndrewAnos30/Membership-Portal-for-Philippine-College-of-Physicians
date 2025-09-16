@@ -16,6 +16,10 @@ include 'header.php';
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <!-- jQuery for modal popups -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- Add in your <head> -->
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
 </head>
 <body>
@@ -27,14 +31,13 @@ include 'header.php';
 
         <!-- ADD INDUCTION FORM -->
         <div class="form-section">
-            <form action="php/add_induction.php" method="POST">
+            <form action="php/induction/add_induction.php" method="POST">
                 <div class="form-row">
                     <div class="form-group">
                         <label>Membership Number</label>
-                        <select name="member_no" required>
+                        <select name="member_no" id="member_no" required>
                             <option value="">-- Select Membership Number --</option>
                             <?php
-                            // Fetch usernames from account table
                             $sql = "SELECT username FROM account ORDER BY username ASC";
                             $result = $conn->query($sql);
 
@@ -48,6 +51,7 @@ include 'header.php';
                             ?>
                         </select>
                     </div>
+
 
                     <div class="form-group">
                         <label>Category</label>
@@ -103,7 +107,7 @@ include 'header.php';
         </div>
 
 
-            <?php include 'php/fetch_induction.php'; ?>
+            <?php include 'php/induction/fetch_induction.php'; ?>
         </div>
 
 
@@ -116,7 +120,7 @@ include 'header.php';
     <div class="modal-content">
         <span class="close">&times;</span>
         <h3>Edit Induction</h3>
-        <form action="php/update_induction.php" method="POST">
+        <form action="php/induction/update_induction.php" method="POST">
             <input type="hidden" name="id" id="edit-id">
             <div class="form-row">
                 <div class="form-group">
@@ -159,7 +163,7 @@ include 'header.php';
     <div class="modal-content">
         <span class="close">&times;</span>
         <h3>Confirm Delete</h3>
-        <form action="php/delete_induction.php" method="POST">
+        <form action="php/induction/delete_induction.php" method="POST">
             <p>Are you sure you want to delete the induction record of <span id="delete-membership-no"></span>?</p>
             <input type="hidden" name="id" id="delete-id">
             <div class="form-actions">
@@ -208,6 +212,14 @@ document.getElementById("filter-membership").addEventListener("keyup", function(
             let txtValue = membershipCell.textContent || membershipCell.innerText;
             row.style.display = txtValue.toUpperCase().indexOf(filter) > -1 ? "" : "none";
         }
+    });
+});
+</script>
+<script>
+$(document).ready(function() {
+    $('#member_no').select2({
+        placeholder: "-- Select Membership Number --",
+        allowClear: true
     });
 });
 </script>

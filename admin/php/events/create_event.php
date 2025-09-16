@@ -9,21 +9,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $event_date = $_POST['event_date'];
     $event_type = $_POST['event_type'];
     $fiscal_year = $_POST['fiscal_year'];
-    $event_host_type = $_POST['event_host_type'];
     $cpd_units = $_POST['cpd_units'];
     $event_host = $_POST['event_host'];
-    $event_host_category = $_POST['event_host_category'];
     $hosted_by = $_POST['hosted_by'];
 
     // Insert query
     $sql = "INSERT INTO events 
-            (event_id, event_title, venue, description, event_date, event_type, fiscal_year, event_host_type, cpd_units, event_host, event_host_category, hosted_by)
+            (event_id, event_title, venue, description, event_date, event_type, fiscal_year, cpd_units, event_host, hosted_by)
             VALUES 
-            (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("ssssssisisss", 
-        $event_id, $event_title, $venue, $description, $event_date, $event_type, $fiscal_year, $event_host_type, $cpd_units, $event_host, $event_host_category, $hosted_by
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("ssssssssis", 
+        $event_id, $event_title, $venue, $description, $event_date, $event_type, $fiscal_year, $cpd_units, $event_host, $hosted_by
     );
 
     if ($stmt->execute()) {

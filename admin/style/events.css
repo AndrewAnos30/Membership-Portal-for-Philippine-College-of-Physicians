@@ -446,30 +446,54 @@ body {
         align-items: stretch;
     }
 
-    .modal-content {
-        width: 100%; /* Take up 100% of the width on mobile */
-        max-width: 100%; /* Remove max-width cap */
-        padding: 15px;  /* Reduce padding on mobile */
-        margin-top: 18%; /* More space from the top on mobile */
-    }
+  .modal-content {
+    width: 100%;
+    max-width: 80%;
+    height: 100vh;              /* full screen */
+    margin: 10px;                  /* remove margin */
+    border-radius: 0;           /* no rounded corners */
+    display: flex;
+    flex-direction: column;
+    padding: 15px;
+  }
 
-    .modal-content form {
-        grid-template-columns: 1fr; /* Stack form fields */
-    }
+  .modal-content h3 {
+    font-size: 18px;
+    margin-bottom: 15px;
+    text-align: center;
+  }
 
-    .modal .form-actions {
-        justify-content: center;
-        gap: 8px;
-    }
+  .modal-content form {
+    display: flex;
+    flex-direction: column;     /* stack vertically */
+    gap: 15px;
+    flex: 1;                    /* allow scrolling inside */
+    overflow-y: auto;
+  }
 
-    /* Adjust close button position for mobile */
-    .modal-content .close {
-        top: 8px;
-        right: 12px;
-        font-size: 22px;
-    }
+  .modal-content .form-group {
+    width: 100%;
+  }
+
+  .modal .form-actions {
+    flex-direction: column;
+    gap: 10px;
+    margin-top: auto;          /* push buttons to bottom */
+  }
+
+  .modal .btn-submit,
+  .modal .btn-reset {
+    width: 100%;               /* full-width buttons */
+  }
+
+  .modal-content .close {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 28px;
+    color: var(--accent-color);
+  }
 }
-
 /* Desktop (default) */
 @media (min-width: 1025px) {
     .modal-content {

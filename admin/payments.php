@@ -1,5 +1,9 @@
 <?php 
 include '../connection/conn.php';
+
+// Fetch usernames from accounts table
+$sql = "SELECT username FROM account";
+$result = $conn->query($sql);
 include 'navbar.php';
 include 'header.php';
 ?>
@@ -9,7 +13,7 @@ include 'header.php';
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Events</title>
+<title>payments</title>
 <!-- CSS -->
 <link rel="stylesheet" href="style/payments.css">
 <!-- Font Awesome for icons -->
@@ -24,249 +28,167 @@ include 'header.php';
 
     <!-- Tabs -->
     <ul class="tabs">
-      <li class="active" data-tab="event-records">Event Records</li>
-      <li data-tab="add-event">Add Event</li>
+      <li class="active" data-tab="event-records">Payment Records</li>
+      <li data-tab="add-payment">Add Payment</li>
     </ul>
 
-<!-- Event Records -->
-<div id="event-records" class="tab-pane active">
-  <div class="search-form">
-    <form>
-      <div class="field">
-        <input type="text" id="filter-event" placeholder="Enter Event Code/No">
+    <!-- payment Records -->
+    <div id="event-records" class="tab-pane active">
+      <div class="search-form">
+        <form>
+          <div class="field">
+            <input type="text" id="filter-payment" placeholder="Enter payment Code/No">
+          </div>
+          <button type="button" class="submit-search">Search</button>
+          <button type="reset" class="btn-reset">Reset</button>
+        </form>
       </div>
-      <button type="button" class="submit-search">Search</button>
-      <button type="reset" class="btn-reset">Reset</button>
-    </form>
-  </div>
+      
+      <?php include "php/payments/payments_list.php"; ?>
 
-  <div class="table-wrapper">
-    <table class="event-table">
-      <thead>
-        <tr>
-          <th>Event Code</th>
-          <th>Event Title</th>
-          <th>CPD Units</th>
-          <th>Event Date</th>
-          <th>Hosted By</th>
-          <th>Description</th>
-          <th>Action</th>
-        </tr>
-      </thead>
-      <tbody>
-          <?php include 'php/events/fetch_events.php'; ?>
-      </tbody>
-    </table>
-  </div>
-
-</div>
-
-
-    <!-- Add Event -->
-    <div id="add-event" class="tab-pane">
-      <form class="event-form" action="php/events/create_event.php" method="POST">
-        
-        <!-- Event ID -->
-        <div class="form-group">
-          <label for="event_id">Event ID</label>
-          <input type="text" id="event_id" name="event_id" placeholder="EVT-2025-001" required>
-        </div>
-
-        <!-- Event Title -->
-        <div class="form-group">
-          <label for="event_title">Event Title</label>
-          <input type="text" id="event_title" name="event_title" placeholder="Enter Event Title" required>
-        </div>
-
-        <!-- Venue & Date -->
-        <div class="form-row">
-          <div class="form-group">
-            <label for="venue">Venue</label>
-            <input type="text" id="venue" name="venue" placeholder="Enter Venue">
-          </div>
-          <div class="form-group">
-            <label for="event_date">Event Date</label>
-            <input type="date" id="event_date" name="event_date" required>
-          </div>
-        </div>
-
-        <!-- Event Type & Fiscal Year -->
-        <div class="form-row">
-          <div class="form-group">
-            <label for="event_type">Event Type</label>
-            <select id="event_type" name="event_type">
-              <option value="">Select Event Type</option>
-              <option>Conference</option>
-              <option>Seminar</option>
-              <option>Workshop</option>
-              <option>Webinar</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="fiscal_year">Fiscal Year</label>
-            <input type="text" id="fiscal_year" name="fiscal_year" placeholder="2025">
-          </div>
-        </div>
-
-        <!-- Event Host Type & CPD Units -->
-        <div class="form-row">
-          <div class="form-group">
-            <label for="event_host_type">Event Host Type</label>
-            <select id="event_host_type" name="event_host_type">
-              <option value="">Select Host Type</option>
-              <option>PCP Chapter</option>
-              <option>Specialty Division</option>
-              <option>Partner Organization</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="cpd_units">PCP CPD Units</label>
-            <input type="number" id="cpd_units" name="cpd_units" placeholder="0">
-          </div>
-        </div>
-
-        <!-- Event Host & Host Category -->
-        <div class="form-row">
-          <div class="form-group">
-            <label for="event_host">Event Host</label>
-            <input type="text" id="event_host" name="event_host" placeholder="Enter Event Host">
-          </div>
-          <div class="form-group">
-            <label for="event_host_category">Event Host Category</label>
-            <select id="event_host_category" name="event_host_category">
-              <option value="">Select Host Category</option>
-              <option>National</option>
-              <option>Regional</option>
-              <option>Local</option>
-            </select>
-          </div>
-        </div>
-
-        <!-- Hosted By -->
-        <div class="form-group">
-          <label for="hosted_by">Hosted By</label>
-          <input type="text" id="hosted_by" name="hosted_by" placeholder="Enter Hosted By">
-        </div>
-
-        <!-- Description -->
-        <div class="form-group">
-          <label for="description">Description</label>
-          <textarea id="description" name="description" rows="4" placeholder="Enter Event Description"></textarea>
-        </div>
-
-        <!-- Actions -->
-        <div class="form-actions">
-          <button type="reset" class="btn-reset">Clear</button>
-          <button type="submit" class="btn-submit">Create Event</button>
-        </div>
-      </form>
     </div>
 
-
-
-  </div>
-</div>
-
-
-<!-- EDIT MODAL -->
-<div id="editModal" class="modal">
-  <div class="modal-content">
-    <span class="close">&times;</span>
-    <h3>Edit Event</h3>
-    <form>
-      <input type="hidden" id="edit-id">
-      <div class="form-row">
-        <div class="form-group">
-          <label>Event Code</label>
-          <input type="text" id="edit-eventcode" readonly>
-        </div>
-        <div class="form-group">
-          <label>Category</label>
-          <select id="edit-category">
-            <option value="">-- Select Category --</option>
-            <option value="Conference">Conference</option>
-            <option value="Seminar">Seminar</option>
-            <option value="Workshop">Workshop</option>
-            <option value="Training">Training</option>
-            <option value="Meeting">Meeting</option>
+<!-- Add Payment -->
+<div id="add-payment" class="tab-pane">
+  <form class="payment-form" action="php/payments/add_payment.php" method="POST">
+    <div class="form-row">
+      <div class="form-group">
+        <label for="date_of_payment">Date of Payment</label>
+        <input type="date" id="date_of_payment" name="date_of_payment" required>
+      </div>
+      <div class="form-group">
+        <label>Official Receipt (OR) No.</label>
+        <div class="or-wrapper">
+          <!-- Prefix dropdown -->
+          <select id="or_prefix" name="or_prefix" required>
+            <option value="">Select</option>
+            <option value="PCP">PCP</option>
+            <option value="ABC">ABC</option>
+            <option value="XYZ">XYZ</option>
           </select>
-        </div>
-        <div class="form-group">
-          <label>Date</label>
-          <input type="date" id="edit-date">
-        </div>
-        <div class="form-group">
-          <label>Remarks</label>
-          <textarea id="edit-remarks"></textarea>
-        </div>
-      </div>
-      <div class="form-actions">
-        <button type="button" class="btn-submit">Save</button>
-        <button type="button" class="btn-reset close-btn">Cancel</button>
-      </div>
-    </form>
-  </div>
-</div>
 
-<!-- DELETE MODAL -->
-<div id="deleteModal" class="modal">
-  <div class="modal-content">
-    <span class="close">&times;</span>
-    <h3>Confirm Delete</h3>
-    <p>Are you sure you want to delete the event record of <span id="delete-event-code"></span>?</p>
-    <input type="hidden" id="delete-id">
-    <div class="form-actions">
-      <button type="button" class="btn-accent">OK</button>
-      <button type="button" class="btn-reset close-btn">Cancel</button>
+          <!-- Number input -->
+          <input type="text" id="or_number" name="or_number" placeholder="123456" pattern="[0-9]*" required>
+        </div>
+      </div>
     </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label for="payor_type">Type of Payor</label>
+        <select id="payor_type" name="payor_type" required>
+          <option value="">Select Type</option>
+          <option value="member">Member</option>
+          <option value="non-member">Non-Member</option>
+          <option value="sponsor">Sponsor</option>
+          <option value="other">Other</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="transaction_ref">Transaction / Reference Number</label>
+        <input type="text" id="transaction_ref" name="transaction_ref" placeholder="Enter Transaction/Ref. No.">
+      </div>
+    </div>
+
+    <!-- Payee Details -->
+    <h4>Payee Details</h4>
+    <div class="form-row">
+      <div class="form-group">
+        <label for="membership_no">Membership (Username)</label>
+        <select id="membership_no" name="membership_no" required>
+          <option value="">Select Member</option>
+          <?php include "php/payments/select_usernames.php"; ?>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="member_name">Full Name</label>
+        <input type="text" id="member_name" name="member_name" placeholder="Full Name" readonly>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="payor_name">Payor Name</label>
+      <input type="text" id="payor_name" name="payor_name" placeholder="Enter Payor Name">
+        <div>
+          <input type="checkbox" id="same_as_member" name="same_as_member">
+          <label for="same_as_member">Same as Member</label>
+        </div>
+    </div>
+
+    <!-- Payment Details -->
+    <h4>Payment Details</h4>
+    <div class="form-row">
+      <div class="form-group">
+        <label for="payment_location">Payment Location</label>
+        <select id="payment_location" name="payment_location">
+          <option value="">Select Location</option>
+          <option value="pcp_office">PCP Office</option>
+          <option value="bpi_bank">BPI Bank</option>
+          <option value="bdo_bank">BDO Bank</option>
+          <option value="gcash">GCash</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="payment_mode">Mode of Payment</label>
+        <select id="payment_mode" name="payment_mode" required>
+          <option value="">Select Mode</option>
+          <option value="cash">Cash</option>
+          <option value="bank_transfer">Bank Transfer</option>
+          <option value="gcash">GCash</option>
+          <option value="check">Check</option>
+          <option value="credit_card">Credit Card</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Remarks -->
+    <div class="form-group">
+      <label for="remarks">Remarks</label>
+      <textarea id="remarks" name="remarks" rows="3" placeholder="Enter remarks (optional)"></textarea>
+    </div>
+
+    <!-- Actions -->
+    <div class="form-actions">
+      <button type="reset" class="btn-reset">Clear</button>
+      <button type="submit" class="btn-submit">Save Payment</button>
+    </div>
+  </form>
+</div>
+
   </div>
 </div>
 
-<script>
-$(document).ready(function(){
 
-  // OPEN EDIT MODAL
-  $('.edit-btn').click(function(){
-    $('#edit-id').val($(this).data('id'));
-    $('#edit-eventcode').val($(this).data('eventcode'));
-    $('#edit-category').val($(this).data('category'));
-    $('#edit-date').val($(this).data('date'));
-    $('#edit-remarks').val($(this).data('remarks'));
-    $('#editModal').show();
-  });
 
-  // OPEN DELETE MODAL
-  $('.delete-btn').click(function(){
-    $('#delete-id').val($(this).data('id'));
-    $('#delete-event-code').text($(this).data('eventcode'));
-    $('#deleteModal').show();
-  });
 
-  // CLOSE MODALS
-  $('.close, .close-btn').click(function(){
-    $(this).closest('.modal').hide();
-  });
-
-});
-</script>
 
 <script>
-document.getElementById("filter-event").addEventListener("keyup", function() {
-  let filter = this.value.toUpperCase();
-  let rows = document.querySelectorAll(".event-table tbody tr");
+  document.getElementById("event_type").addEventListener("change", function() {
+    let eventType = this.value;
 
-  rows.forEach(row => {
-    let eventCell = row.cells[0]; // first column = event code
-    if (eventCell) {
-      let txtValue = eventCell.textContent || eventCell.innerText;
-      row.style.display = txtValue.toUpperCase().indexOf(filter) > -1 ? "" : "none";
+    if(eventType) {
+        fetch("php/events/id_generator.php", {
+            method: "POST",
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            body: "event_type=" + encodeURIComponent(eventType)
+        })
+        .then(response => response.json())
+        .then(data => {
+            if(data.event_id) {
+                document.getElementById("event_id").value = data.event_id;
+            } else {
+                alert("Error: " + data.error);
+            }
+        });
+    } else {
+        document.getElementById("event_id").value = "";
     }
-  });
 });
 </script>
 
 <script>
 $(document).ready(function(){
+  // Tabs switcher
   $(".tabs li").click(function(){
     $(".tabs li").removeClass("active");
     $(this).addClass("active");
@@ -276,38 +198,23 @@ $(document).ready(function(){
   });
 });
 </script>
+
 <script>
 document.addEventListener("DOMContentLoaded", function () {
-  const searchInput = document.getElementById("filter-event");
+  const searchInput = document.getElementById("filter-payment");
   const searchBtn = document.querySelector(".submit-search");
   const resetBtn = document.querySelector(".btn-reset");
-  const tableRows = document.querySelectorAll(".event-table tbody tr");
+  const tableRows = document.querySelectorAll(".payment-table tbody tr");
 
-  // Function to filter rows
   function filterTable() {
     const filterValue = searchInput.value.toLowerCase().trim();
 
     tableRows.forEach(row => {
       const cells = row.querySelectorAll("td");
-      const eventId       = cells[0]?.textContent.toLowerCase();
-      const eventTitle    = cells[1]?.textContent.toLowerCase();
-      const cpd           = cells[2]?.textContent.toLowerCase();
-      const eventDate     = cells[3]?.textContent.toLowerCase();
-      const hostedBy      = cells[4]?.textContent.toLowerCase();
-      const description   = cells[5]?.textContent.toLowerCase();
-
-      if (
-        eventId.includes(filterValue) ||
-        eventTitle.includes(filterValue) ||
-        cpd.includes(filterValue) ||
-        eventDate.includes(filterValue) ||
-        hostedBy.includes(filterValue) ||
-        description.includes(filterValue)
-      ) {
-        row.style.display = "";
-      } else {
-        row.style.display = "none";
-      }
+      let rowText = "";
+      cells.forEach(cell => rowText += cell.textContent.toLowerCase() + " ");
+      
+      row.style.display = rowText.includes(filterValue) ? "" : "none";
     });
   }
 
@@ -320,8 +227,38 @@ document.addEventListener("DOMContentLoaded", function () {
     tableRows.forEach(row => (row.style.display = ""));
   });
 
-  // Live search
+  // Live search as user types
   searchInput.addEventListener("keyup", filterTable);
+});
+</script>
+<script>
+document.getElementById("membership_no").addEventListener("change", function() {
+    let membershipNo = this.value;
+    if (membershipNo) {
+        fetch("php/payments/get_member_name.php?membership_no=" + membershipNo)
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById("member_name").value = data;
+                // If "Same as Member" is checked, auto-fill payor_name too
+                let payorCheckbox = document.getElementById("same_as_member");
+                if (payorCheckbox.checked) {
+                    document.getElementById("payor_name").value = data;
+                }
+            });
+    } else {
+        document.getElementById("member_name").value = "";
+        document.getElementById("payor_name").value = "";
+    }
+});
+
+// Sync payor name if checkbox is checked
+document.getElementById("same_as_member").addEventListener("change", function() {
+    if (this.checked) {
+        document.getElementById("payor_name").value = 
+            document.getElementById("member_name").value;
+    } else {
+        document.getElementById("payor_name").value = "";
+    }
 });
 </script>
 

@@ -9,10 +9,6 @@
     </div>
 
     <div class="right-container">
-        <div class="search-widget">
-            <i class="fas fa-search search-icon"></i>
-            <input type="text" placeholder="Search..." class="search-input">
-        </div>
         <div class="profile-dropdown">
             <img src="../img/user.png" alt="Profile" class="profile-img" id="profileToggle">
             <div class="dropdown" id="profileDropdown">
