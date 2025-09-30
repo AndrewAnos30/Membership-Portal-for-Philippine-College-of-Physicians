@@ -1,4 +1,6 @@
-
+/* ===============================
+   Layout Containers
+================================= */
 .content-container {
     background-color: #f5f5f5;
     margin-left: 220px;
@@ -6,11 +8,14 @@
     padding-bottom: 60px;
 }
 
+/* ===============================
+   Card Section
+================================= */
 .card-container {
     font-family: Arial, sans-serif;
     display: flex;
     flex-wrap: wrap;
-    gap: 20px; /* Only this controls spacing between cards */
+    gap: 20px; /* spacing between cards */
     padding: 30px;
     box-sizing: border-box;
 }
@@ -20,15 +25,14 @@
     border-radius: 12px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     padding: 20px;
-    flex: 1 1 calc(25% - 15px); /* 4 columns, adjust for gap */
+    flex: 1 1 calc(25% - 15px); /* 4 columns */
     display: flex;
     align-items: center;
     gap: 20px;
     transition: transform 0.2s;
     box-sizing: border-box;
-    margin: 0; /* remove any default margin */
+    margin: 0;
 }
-
 
 .card:hover {
     transform: translateY(-5px);
@@ -72,6 +76,9 @@
     margin-left: 35px;
 }
 
+/* ===============================
+   Table Section
+================================= */
 .userRecord-table {
     background-color: #ffffff;
     margin: 20px 30px;
@@ -106,6 +113,9 @@
     background-color: #f9f9f9;
 }
 
+/* ===============================
+   Pagination
+================================= */
 .pagination {
     display: flex;
     flex-wrap: wrap;
@@ -134,19 +144,21 @@
     background-color: #ddd;
 }
 
-/* Hide mobile table by default */
+/* ===============================
+   Mobile Tables
+================================= */
 .mobile-table {
     display: none;
 }
 
-/* Desktop table hidden on small screens */
+/* Desktop hidden on mobile */
 @media (max-width: 768px) {
-        .content-container {
+    .content-container {
         margin-left: 0px;
-        margin-top: 80px;
-        padding: 20px;
         margin-top: 100px;
+        padding: 20px;
     }
+
     .desktop-table {
         display: none;
     }
@@ -193,4 +205,110 @@
     .record-card.active .record-details {
         display: block;
     }
+}
+
+/* ===============================
+   Icons
+================================= */
+.edit-icon,
+.delete-icon {
+    color: #4F1713;
+}
+
+/* ===============================
+   Inline Edit (Chapters)
+================================= */
+.chapter-text {
+    display: inline-block;
+    font-weight: 500;
+    color: #333;
+}
+
+.chapter-edit-form {
+    display: none; /* hidden until Edit is clicked */
+    align-items: center;
+    gap: 8px;
+}
+
+.chapter-edit-form input[type="text"] {
+    padding: 6px 10px;
+    border: 1px solid #4F1713;
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+.chapter-edit-form button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    color: #4F1713; /* theme color */
+}
+
+/* ===============================
+   Action Buttons
+================================= */
+.action-btn {
+    border: none;
+    background: none;
+    cursor: pointer;
+    margin: 0 4px;
+    font-size: 16px;
+    color: #4F1713;
+    transition: transform 0.2s, opacity 0.2s;
+}
+
+.action-btn:hover {
+    transform: scale(1.1);
+    opacity: 0.8;
+}
+
+
+/* ===============================
+   Form Section (Event Form)
+================================= */
+.event-form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-md);
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.full-width {
+    grid-column: span 2;
+    width: 100%;
+}
+
+.form-group label {
+    margin-bottom: 6px;
+    font-weight: bold;
+    font-size: 14px;
+    color: #333;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    padding: 10px 12px;
+    border-radius: var(--border-radius);
+    border: 1px solid #4F1713;
+    font-size: 14px;
+    background: #fff;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: #4F1713;
 }

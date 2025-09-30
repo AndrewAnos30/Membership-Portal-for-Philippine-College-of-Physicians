@@ -18,7 +18,7 @@ $new_password = $_POST['password'] ?? '';
 $confirm_password = $_POST['confirm_password'] ?? '';
 
 // Fetch old values
-$stmt = $conn->prepare("SELECT username, role FROM account WHERE id=?");
+$stmt = $conn->prepare("SELECT username, role FROM admin WHERE id=?");
 $stmt->bind_param("i", $id);
 $stmt->execute();
 $stmt->bind_result($old_username, $old_role);
@@ -56,7 +56,7 @@ try {
     }
 
     // ---- Update account table ----
-    $sql = "UPDATE account SET username=?, role=?";
+    $sql = "UPDATE admin SET username=?, role=?";
     $types = "ssi";
     $params = [$new_username ?: $old_username, $new_role ?: $old_role, $id];
 
@@ -66,7 +66,7 @@ try {
             exit;
         }
         $hashed = password_hash($new_password, PASSWORD_BCRYPT);
-        $sql = "UPDATE account SET username=?, role=?, password=? WHERE id=?";
+        $sql = "UPDATE admin SET username=?, role=?, password=? WHERE id=?";
         $types = "sssi";
         $params = [$new_username ?: $old_username, $new_role ?: $old_role, $hashed, $id];
     } else {

@@ -2,7 +2,7 @@
 include '../connection/conn.php';
 
 // Fetch only admin and superadmin accounts
-$sql = "SELECT id, username AS membership_no, role FROM account WHERE role IN ('admin', 'superadmin') ORDER BY role DESC";
+$sql = "SELECT id, username AS membership_no, role FROM admin WHERE role IN ('admin', 'superadmin') ORDER BY role DESC";
 $result = $conn->query($sql);
 ?>
 

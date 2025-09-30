@@ -15,7 +15,7 @@ if (!isset($_POST['id']) || empty($_POST['id'])) {
 $id = intval($_POST['id']); // sanitize
 
 // Fetch the username (used in related tables)
-$stmt = $conn->prepare("SELECT username FROM account WHERE id = ?");
+$stmt = $conn->prepare("SELECT username FROM admin WHERE id = ?");
 $stmt->bind_param("i", $id);
 $stmt->execute();
 $stmt->bind_result($username);
@@ -48,7 +48,7 @@ try {
     }
 
     // Finally delete from account
-    $stmt = $conn->prepare("DELETE FROM account WHERE id = ?");
+    $stmt = $conn->prepare("DELETE FROM admin WHERE id = ?");
     $stmt->bind_param("i", $id);
     $stmt->execute();
     $stmt->close();

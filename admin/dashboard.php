@@ -24,7 +24,7 @@ include 'php/dashboard/dashboard_data.php';
             </div>
         </div>
 
-        <div class="card">
+        <div class="card" onclick="window.location.href='chapters.php'" style="cursor:pointer;">
             <div class="icon"><i class="fas fa-building"></i></div>
             <div class="text-group">
                 <div class="label">PCP Chapters</div>
